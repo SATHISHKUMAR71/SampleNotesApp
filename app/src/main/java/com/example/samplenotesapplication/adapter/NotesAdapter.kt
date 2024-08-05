@@ -1,5 +1,6 @@
 package com.example.samplenotesapplication.adapter
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +16,10 @@ import com.example.samplenotesapplication.fragments.AddNote
 import com.example.samplenotesapplication.model.Note
 import com.example.samplenotesapplication.viewmodel.NotesAppViewModel
 
-class NotesAdapter(private var activity: FragmentActivity,private val viewModel: NotesAppViewModel):RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
+class NotesAdapter(private var context: Context,private val viewModel: NotesAppViewModel):RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
 
     private var notesList: MutableList<Note> = mutableListOf()
+    private var pos = 0
     inner class NotesViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
         return NotesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.notes_layout,parent,false))
@@ -29,6 +31,7 @@ class NotesAdapter(private var activity: FragmentActivity,private val viewModel:
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
         holder.itemView.apply {
+            pos = holder.adapterPosition
             findViewById<TextView>(R.id.titleNote).text = notesList[position].title
             findViewById<TextView>(R.id.dateNote).text = notesList[position].createdAt
             findViewById<TextView>(R.id.contentNote).text = notesList[position].content
@@ -40,8 +43,8 @@ class NotesAdapter(private var activity: FragmentActivity,private val viewModel:
                     putString("date",notesList[position].createdAt)
                     putString("content",notesList[position].content)
                 }
-                Toast.makeText(context,"Message Clicked",Toast.LENGTH_SHORT).show()
-                activity.supportFragmentManager.beginTransaction()
+
+                (context as FragmentActivity).supportFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainerView,addNoteFragment)
                     .addToBackStack("Note View")
                     .commit()
@@ -51,7 +54,7 @@ class NotesAdapter(private var activity: FragmentActivity,private val viewModel:
                 viewModel.deleteNote(notesList[position])
 //                db.delete(notesList[position])
 //                notesList = db.readAllNotes()
-                notifyItemRemoved(position)
+
             }
         }
     }

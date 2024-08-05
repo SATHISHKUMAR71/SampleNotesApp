@@ -47,7 +47,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
+    debugImplementation(libs.leakcanary.android)
     //    room and lifecycle aware
     val room_version = "2.6.1" // Use the latest version compatible with your project
     implementation(libs.androidx.lifecycle.viewmodel.ktx)

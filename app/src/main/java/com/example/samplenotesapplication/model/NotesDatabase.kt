@@ -13,12 +13,13 @@ abstract class NotesDatabase:RoomDatabase() {
         private var INSTANCE:NotesDatabase? = null
         fun getNoteDatabase(context:Context):NotesDatabase{
             return INSTANCE?: synchronized(this){
-                INSTANCE = Room.databaseBuilder(
-                    context,
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
                     NotesDatabase::class.java,
                     "notes_app_database")
                     .build()
-                INSTANCE!!
+                INSTANCE = instance
+                instance
             }
         }
     }
